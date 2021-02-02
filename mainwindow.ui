@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>692</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLineEdit" name="inputPathLineEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>541</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="inputBrowseButton">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>30</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Browse...</string>
+    </property>
+   </widget>
+   <widget class="QSpinBox" name="halfstepsEnter">
+    <property name="geometry">
+     <rect>
+      <x>140</x>
+      <y>110</y>
+      <width>42</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="minimum">
+     <number>-99</number>
+    </property>
+   </widget>
+   <widget class="QLabel" name="halfstepsLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>110</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Enter numer of halfsteps</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="processButton">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>140</y>
+      <width>661</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Process</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="outputBrowseButton">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>80</y>
+      <width>121</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Browse...</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="outputPathLineEdit">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>80</y>
+      <width>541</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="inputLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Input file path:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="outputLabel">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>91</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Output file path:</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>692</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
