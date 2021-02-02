@@ -3,7 +3,6 @@
 #include <QFileDialog>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <vector>
 #include <math.h>
 #include <stdio.h>
 #define M_PI 3.14159265358979323846 /* pi */
@@ -11,16 +10,27 @@
 void scale_spector(float factor, fftw_complex *inputSpectr, fftw_complex *outputSpectr);
 void make_window(std::vector<double> buffer);
 
-const int N = 4096;
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     ui->processButton->setEnabled(false);
+
+    tempBuffer.resize(N);
+    inputSpectr = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N / 2 + 1);
+    outputSpectr = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N / 2 + 1);
+    forward = fftw_plan_dft_r2c_1d(N, tempBuffer.data(), inputSpectr, FFTW_ESTIMATE);
+    backward = fftw_plan_dft_c2r_1d(N, outputSpectr, tempBuffer.data(), FFTW_ESTIMATE);
+
+
 }
 
 MainWindow::~MainWindow()
 {
+    if(forward)fftw_destroy_plan(forward);
+    if(backward)fftw_destroy_plan(backward);
+    //fftw_free(outputSpectr);
+    //fftw_free(inputSpectr);
     delete ui;
 }
 
@@ -81,6 +91,7 @@ void MainWindow::on_processButton_clicked()
     AudioFile<double>::AudioBuffer outputBuffer;
 
     inputAudio.load(ui->inputPathLineEdit->text().toStdString());
+    std::cout<<"\nBuff size"<<inputAudio.samples[0].size()<<"\n";
     int numChannel = inputAudio.getNumChannels();
     int numSamples = inputAudio.getNumSamplesPerChannel();
 
@@ -93,12 +104,6 @@ void MainWindow::on_processButton_clicked()
     for (int i = 0; i < numChannel; ++i)
         outputBuffer[i].resize(numSamples);
 
-    std::vector<double> tempBuffer(N);
-
-    fftw_complex *inputSpectr = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N / 2 + 1);
-    fftw_complex *outputSpectr = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N / 2 + 1);
-    fftw_plan forward = fftw_plan_dft_r2c_1d(N, tempBuffer.data(), inputSpectr, FFTW_ESTIMATE);
-    fftw_plan backward = fftw_plan_dft_c2r_1d(N, outputSpectr, tempBuffer.data(), FFTW_ESTIMATE);
 
     int processed_samples;
     for (int i = 0; i < numChannel; ++i)
@@ -151,8 +156,4 @@ void MainWindow::on_processButton_clicked()
         std::cout << "OK";
     }
 
-    fftw_destroy_plan(forward);
-    fftw_destroy_plan(backward);
-    //fftw_free(outputSpectr);
-    //fftw_free(inputSpectr);
 }

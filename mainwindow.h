@@ -5,6 +5,7 @@
 #include "fftw3.h"
 #include "AudioFile.h"
 
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -27,9 +28,15 @@ private slots:
     void on_processButton_clicked();
 
 private:
+    const int N = 4096;
     Ui::MainWindow *ui;
     AudioFile<double> inputAudio;
     float factor;
+    std::vector<double> tempBuffer;
+    fftw_complex *inputSpectr;
+    fftw_complex *outputSpectr;
+    fftw_plan forward;
+    fftw_plan backward;
     void make_window(std::vector<double> buffer);
     void scale_spector(float factor, fftw_complex *inputSpectr, fftw_complex *outputSpectr);
 };
