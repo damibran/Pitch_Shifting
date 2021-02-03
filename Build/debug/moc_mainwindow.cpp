@@ -23,7 +23,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
     const uint offsetsAndSize[12];
-    char stringdata0[130];
+    char stringdata0[133];
 };
 #define QT_MOC_LITERAL(ofs, len) \
     uint(offsetof(qt_meta_stringdata_MainWindow_t, stringdata0) + ofs), len 
@@ -32,15 +32,15 @@ static const qt_meta_stringdata_MainWindow_t qt_meta_stringdata_MainWindow = {
 QT_MOC_LITERAL(0, 10), // "MainWindow"
 QT_MOC_LITERAL(11, 28), // "on_inputBrowseButton_clicked"
 QT_MOC_LITERAL(40, 0), // ""
-QT_MOC_LITERAL(41, 33), // "on_halfstepsEnter_editingFini..."
-QT_MOC_LITERAL(75, 29), // "on_outputBrowseButton_clicked"
-QT_MOC_LITERAL(105, 24) // "on_processButton_clicked"
+QT_MOC_LITERAL(41, 29), // "on_outputBrowseButton_clicked"
+QT_MOC_LITERAL(71, 24), // "on_processButton_clicked"
+QT_MOC_LITERAL(96, 36) // "on_inputPathLineEdit_editingF..."
 
     },
     "MainWindow\0on_inputBrowseButton_clicked\0"
-    "\0on_halfstepsEnter_editingFinished\0"
-    "on_outputBrowseButton_clicked\0"
-    "on_processButton_clicked"
+    "\0on_outputBrowseButton_clicked\0"
+    "on_processButton_clicked\0"
+    "on_inputPathLineEdit_editingFinished"
 };
 #undef QT_MOC_LITERAL
 
@@ -79,9 +79,9 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         (void)_t;
         switch (_id) {
         case 0: _t->on_inputBrowseButton_clicked(); break;
-        case 1: _t->on_halfstepsEnter_editingFinished(); break;
-        case 2: _t->on_outputBrowseButton_clicked(); break;
-        case 3: _t->on_processButton_clicked(); break;
+        case 1: _t->on_outputBrowseButton_clicked(); break;
+        case 2: _t->on_processButton_clicked(); break;
+        case 3: _t->on_inputPathLineEdit_editingFinished(); break;
         default: ;
         }
     }

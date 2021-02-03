@@ -10,11 +10,13 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    shifter.cpp
 
 HEADERS += \
     mainwindow.h\
-    AudioFile.h
+    AudioFile.h \
+    shifter.h
 
 
 FORMS += \

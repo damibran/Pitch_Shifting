@@ -2,9 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "fftw3.h"
-#include "AudioFile.h"
-
+#include <shifter.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -21,23 +19,15 @@ public:
 private slots:
     void on_inputBrowseButton_clicked();
 
-    void on_halfstepsEnter_editingFinished();
-
     void on_outputBrowseButton_clicked();
 
     void on_processButton_clicked();
 
+    void on_inputPathLineEdit_editingFinished();
+
 private:
-    const int N = 4096;
     Ui::MainWindow *ui;
-    AudioFile<double> inputAudio;
-    float factor;
-    std::vector<double> tempBuffer;
-    fftw_complex *inputSpectr;
-    fftw_complex *outputSpectr;
-    fftw_plan forward;
-    fftw_plan backward;
-    void make_window(std::vector<double> buffer);
-    void scale_spector(float factor, fftw_complex *inputSpectr, fftw_complex *outputSpectr);
+    Shifter shifter;
+
 };
 #endif // MAINWINDOW_H
