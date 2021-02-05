@@ -27,7 +27,7 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-unix|win32: LIBS += -L$$PWD/Dependencies/fftw/ -llibfftw3-3
+win32: LIBS += -L$$PWD/Dependencies/fftw_dynamic/ -llibfftw3-3
 
-INCLUDEPATH += $$PWD/Dependencies/fftw
-DEPENDPATH += $$PWD/Dependencies/fftw
+INCLUDEPATH += $$PWD/Dependencies/fftw_dynamic
+DEPENDPATH += $$PWD/Dependencies/fftw_dynamic
