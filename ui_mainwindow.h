@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created by: Qt User Interface Compiler version 6.0.0
+** Created by: Qt User Interface Compiler version 5.15.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
 ********************************************************************************/
@@ -35,6 +35,8 @@ public:
     QLineEdit *outputPathLineEdit;
     QLabel *inputLabel;
     QLabel *outputLabel;
+    QPushButton *inputPlayButton;
+    QPushButton *outputPlayButton;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -73,10 +75,16 @@ public:
         outputLabel = new QLabel(centralwidget);
         outputLabel->setObjectName(QString::fromUtf8("outputLabel"));
         outputLabel->setGeometry(QRect(10, 60, 91, 16));
+        inputPlayButton = new QPushButton(centralwidget);
+        inputPlayButton->setObjectName(QString::fromUtf8("inputPlayButton"));
+        inputPlayButton->setGeometry(QRect(10, 180, 311, 25));
+        outputPlayButton = new QPushButton(centralwidget);
+        outputPlayButton->setObjectName(QString::fromUtf8("outputPlayButton"));
+        outputPlayButton->setGeometry(QRect(360, 180, 311, 25));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 692, 20));
+        menubar->setGeometry(QRect(0, 0, 692, 25));
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName(QString::fromUtf8("statusbar"));
@@ -96,6 +104,8 @@ public:
         outputBrowseButton->setText(QCoreApplication::translate("MainWindow", "Browse...", nullptr));
         inputLabel->setText(QCoreApplication::translate("MainWindow", "Input file path:", nullptr));
         outputLabel->setText(QCoreApplication::translate("MainWindow", "Output file path:", nullptr));
+        inputPlayButton->setText(QCoreApplication::translate("MainWindow", "Play input sound", nullptr));
+        outputPlayButton->setText(QCoreApplication::translate("MainWindow", "Play output sound", nullptr));
     } // retranslateUi
 
 };

@@ -25,6 +25,10 @@ private slots:
 
     void on_inputPathLineEdit_editingFinished();
 
+    void on_inputPlayButton_clicked();
+
+    void on_outputPlayButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     Shifter shifter;

@@ -8,8 +8,8 @@ Shifter::Shifter()
     tempBuffer.resize(N);
     inputSpectr = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N / 2 + 1);
     outputSpectr = (fftw_complex *)fftw_malloc(sizeof(fftw_complex) * N / 2 + 1);
-    forward = fftw_plan_dft_r2c_1d(N, tempBuffer.data(), inputSpectr, FFTW_ESTIMATE);
-    backward = fftw_plan_dft_c2r_1d(N, outputSpectr, tempBuffer.data(), FFTW_ESTIMATE);
+    forward = fftw_plan_dft_r2c_1d(N, tempBuffer.data(), inputSpectr, FFTW_MEASURE);
+    backward = fftw_plan_dft_c2r_1d(N, outputSpectr, tempBuffer.data(), FFTW_MEASURE);
 }
 
 //Loading input file and configuring output file buffer size
@@ -28,6 +28,8 @@ void Shifter::load_input_file(std::string inputFileName)
     outputBuffer.resize(numChannel);
     for (int i = 0; i < numChannel; ++i)
         outputBuffer[i].resize(numSamples);
+
+    outputAudio.setAudioBuffer(outputBuffer);
 }
 
 //Just fft and scaling
@@ -47,7 +49,7 @@ void Shifter::make_shift(std::string outputFileName, float factor)
                       inputAudio.samples[i].begin() + processed_samples + N,
                       tempBuffer.begin());
 
-            make_window(tempBuffer);
+            //make_window(tempBuffer);
             fftw_execute(forward);
 
             scale_spector(factor, inputSpectr, outputSpectr);
@@ -55,10 +57,9 @@ void Shifter::make_shift(std::string outputFileName, float factor)
             fftw_execute(backward);
             for (int j = 0; j < (int)tempBuffer.size(); ++j)
                 tempBuffer[j] = tempBuffer[j] / N;
-            outputBuffer[i].insert(outputBuffer[i].begin() + processed_samples,
-                                   tempBuffer.begin(),
-                                   tempBuffer.end());
+            std::copy(tempBuffer.begin(),tempBuffer.end(),outputBuffer[i].begin()+processed_samples);
             processed_samples += N;
+            qDebug()<<"FUCK";
         }
         if (numSamples != processed_samples)
         {
@@ -68,7 +69,7 @@ void Shifter::make_shift(std::string outputFileName, float factor)
             while ((int)tempBuffer.size() != N)
                 tempBuffer.push_back(0);
 
-            make_window(tempBuffer);
+            //make_window(tempBuffer);
             fftw_execute(forward);
 
             scale_spector(factor, inputSpectr, outputSpectr);
@@ -76,25 +77,25 @@ void Shifter::make_shift(std::string outputFileName, float factor)
             fftw_execute(backward);
             for (int j = 0; j < (int)tempBuffer.size(); ++j)
                 tempBuffer[j] = tempBuffer[j] / N;
-            outputBuffer[i].insert(outputBuffer[i].begin() + processed_samples,
-                                   tempBuffer.begin(),
-                                   tempBuffer.end());
+            std::copy(tempBuffer.begin(),tempBuffer.end(),outputBuffer[i].begin()+processed_samples);
         }
     }
 
-    if (outputAudio.setAudioBuffer(outputBuffer))
-    {
-        outputAudio.save(outputFileName);
+    if(outputAudio.save(outputFileName))
         qDebug() << "OK";
-    }
+    else
+        qDebug() << "NOTLIKETHIS";
+
 }
 
 Shifter::~Shifter()
 {
+    qDebug() << "DELETE1";
     if(forward)fftw_destroy_plan(forward);
     if(backward)fftw_destroy_plan(backward);
     //fftw_free(outputSpectr);
     //fftw_free(inputSpectr);
+    qDebug() << "DELETE2";
 }
 
 void Shifter::make_window(std::vector<double> buffer)
@@ -115,13 +116,26 @@ void Shifter::scale_spector(float factor, fftw_complex *inputSpectr, fftw_comple
         outputSpectr[i][1] = 0;
     }
 
-    for (int i = 0; i < N / 2 + 1; ++i)
-    {
-        if (i * factor > 0 && i * factor < N / 2 + 1)
+    if(factor<1.0)
+        for (int i = 0; i < N / 2 + 1; ++i)
         {
-            outputSpectr[(int)(i * factor)][0] = inputSpectr[i][0];
-            outputSpectr[(int)(i * factor)][1] = inputSpectr[i][1];
-            //std::cout << (int)(i * factor) << " : " << i<<"\n";
+            if (i * factor > 0 && i * factor < N / 2 + 1)
+            {
+                outputSpectr[(int)(i * factor)][0] = inputSpectr[i][0];
+                outputSpectr[(int)(i * factor)][1] = inputSpectr[i][1];
+                //std::cout << (int)(i * factor) << " : " << i<<"\n";
+            }
+        }
+    else
+    {
+        for (int i = N / 2; i >= 0 ; --i)
+        {
+            if (i * factor > 0 && i * factor < N / 2 + 1)
+            {
+                outputSpectr[(int)(i * factor)][0] = inputSpectr[i][0];
+                outputSpectr[(int)(i * factor)][1] = inputSpectr[i][1];
+                //std::cout << (int)(i * factor) << " : " << i<<"\n";
+            }
         }
     }
 }
