@@ -125,32 +125,6 @@
      <string>Output file path:</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="inputPlayButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>180</y>
-      <width>311</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Play input sound</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="outputPlayButton">
-    <property name="geometry">
-     <rect>
-      <x>360</x>
-      <y>180</y>
-      <width>311</width>
-      <height>25</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Play output sound</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -158,7 +132,7 @@
      <x>0</x>
      <y>0</y>
      <width>692</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

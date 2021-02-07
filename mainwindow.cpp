@@ -1,7 +1,6 @@
 #include <QDir>
 #include <QDebug>
 #include <QFileDialog>
-#include <QSound>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <stdio.h>
@@ -48,18 +47,8 @@ void MainWindow::on_processButton_clicked()
     {
         shifter.make_shift(ui->outputPathLineEdit->text().toStdString(),
                            pow(2.0,((float)ui->halfstepsEnter->value())/12.0));
-        qDebug()<<"OK2";
     }
     else
         qDebug()<<"Error in fields data";
 }
 
-void MainWindow::on_inputPlayButton_clicked()
-{
-    QSound::play(ui->inputPathLineEdit->text());
-}
-
-void MainWindow::on_outputPlayButton_clicked()
-{
-    QSound::play(ui->outputPathLineEdit->text());
-}
