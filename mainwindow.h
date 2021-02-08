@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <shifter.h>
+#include <QSound>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -24,6 +25,10 @@ private slots:
     void on_processButton_clicked();
 
     void on_inputPathLineEdit_editingFinished();
+
+    void on_inputPlayButton_clicked();
+
+    void on_outputPlayButton_clicked();
 
 private:
     Ui::MainWindow *ui;

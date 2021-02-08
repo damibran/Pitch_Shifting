@@ -52,3 +52,12 @@ void MainWindow::on_processButton_clicked()
         qDebug()<<"Error in fields data";
 }
 
+void MainWindow::on_inputPlayButton_clicked()
+{
+    QSound::play(ui->inputPathLineEdit->text());
+}
+
+void MainWindow::on_outputPlayButton_clicked()
+{
+    QSound::play(ui->outputPathLineEdit->text());
+}

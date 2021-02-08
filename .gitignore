@@ -1,10 +1,13 @@
-/Build
-
 #qt
 *.user
+*.Debug
+*.Release
+Makefile
+*.stash
 
 # Prerequisites
 *.d
+
 
 # Compiled Object files
 *.slo
@@ -33,3 +36,6 @@
 *.exe
 *.out
 *.app
+debug/moc_mainwindow.cpp
+debug/moc_predefs.h
+
