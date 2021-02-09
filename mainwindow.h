@@ -20,15 +20,11 @@ public:
 private slots:
     void on_inputBrowseButton_clicked();
 
-    void on_outputBrowseButton_clicked();
-
     void on_processButton_clicked();
 
     void on_inputPathLineEdit_editingFinished();
 
-    void on_inputPlayButton_clicked();
-
-    void on_outputPlayButton_clicked();
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     Ui::MainWindow *ui;

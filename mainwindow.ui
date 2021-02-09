@@ -37,66 +37,17 @@
      <string>Browse...</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="halfstepsEnter">
-    <property name="geometry">
-     <rect>
-      <x>140</x>
-      <y>110</y>
-      <width>42</width>
-      <height>22</height>
-     </rect>
-    </property>
-    <property name="minimum">
-     <number>-99</number>
-    </property>
-   </widget>
-   <widget class="QLabel" name="halfstepsLabel">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>110</y>
-      <width>121</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Enter numer of halfsteps</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="processButton">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>140</y>
+      <y>70</y>
       <width>661</width>
       <height>21</height>
      </rect>
     </property>
     <property name="text">
      <string>Process</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="outputBrowseButton">
-    <property name="geometry">
-     <rect>
-      <x>560</x>
-      <y>80</y>
-      <width>121</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Browse...</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="outputPathLineEdit">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>80</y>
-      <width>541</width>
-      <height>21</height>
-     </rect>
     </property>
    </widget>
    <widget class="QLabel" name="inputLabel">
@@ -110,45 +61,6 @@
     </property>
     <property name="text">
      <string>Input file path:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="outputLabel">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>60</y>
-      <width>91</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Output file path:</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="inputPlayButton">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>180</y>
-      <width>311</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Play input sound</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="outputPlayButton">
-    <property name="geometry">
-     <rect>
-      <x>360</x>
-      <y>180</y>
-      <width>311</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Play output sound</string>
     </property>
    </widget>
   </widget>
