@@ -29,6 +29,7 @@ public:
     QPushButton *inputBrowseButton;
     QPushButton *processButton;
     QLabel *inputLabel;
+    QLabel *octaveLabel;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -47,10 +48,13 @@ public:
         inputBrowseButton->setGeometry(QRect(560, 30, 121, 21));
         processButton = new QPushButton(centralwidget);
         processButton->setObjectName(QString::fromUtf8("processButton"));
-        processButton->setGeometry(QRect(10, 70, 661, 21));
+        processButton->setGeometry(QRect(10, 90, 661, 21));
         inputLabel = new QLabel(centralwidget);
         inputLabel->setObjectName(QString::fromUtf8("inputLabel"));
         inputLabel->setGeometry(QRect(10, 10, 91, 16));
+        octaveLabel = new QLabel(centralwidget);
+        octaveLabel->setObjectName(QString::fromUtf8("octaveLabel"));
+        octaveLabel->setGeometry(QRect(20, 60, 47, 13));
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -71,6 +75,7 @@ public:
         inputBrowseButton->setText(QCoreApplication::translate("MainWindow", "Browse...", nullptr));
         processButton->setText(QCoreApplication::translate("MainWindow", "Process", nullptr));
         inputLabel->setText(QCoreApplication::translate("MainWindow", "Input file path:", nullptr));
+        octaveLabel->setText(QCoreApplication::translate("MainWindow", "Octave", nullptr));
     } // retranslateUi
 
 };

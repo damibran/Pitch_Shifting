@@ -5,6 +5,11 @@
 
 Shifter::Shifter()
 {
+    note_freqs.resize(60);
+    note_freqs[0]=65.4063913251496587;
+    for(int i =1;i<60;++i)
+        note_freqs[i]=note_freqs[i-1]*pow(2.0,1.0/12.0);
+
     tempBuffer.resize(N);
     inputSpectr = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * (N / 2 + 1));
     outputSpectr = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * (N / 2 + 1));

@@ -44,6 +44,16 @@ void MainWindow::on_processButton_clicked()
 
 void MainWindow::keyPressEvent(QKeyEvent *event)
 {
-    qDebug()<<event->text();
+    if(event->text()=="q"||event->text()=="w")
+    {
+        if(event->text()=="q"&&shifter.octave>0)
+            shifter.octave-=1;
+        else if(event->text()=="w"&&shifter.octave<5)
+            shifter.octave+=1;
+        ui->octaveLabel->setText(QString::number(shifter.octave));
+    }
+    else{
+        qDebug()<<shifter.keys.at(event->text().toStdString())+12*shifter.octave;
+    }
 }
 
