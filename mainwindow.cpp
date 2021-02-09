@@ -48,7 +48,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
     {
         if(event->text()=="q"&&shifter.octave>0)
             shifter.octave-=1;
-        else if(event->text()=="w"&&shifter.octave<5)
+        else if(event->text()=="w"&&shifter.octave<4)
             shifter.octave+=1;
         ui->octaveLabel->setText(QString::number(shifter.octave));
     }

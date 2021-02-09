@@ -10,11 +10,11 @@ Shifter::Shifter()
     for(int i =1;i<60;++i)
         note_freqs[i]=note_freqs[i-1]*pow(2.0,1.0/12.0);
 
-    tempBuffer.resize(N);
+    frame.resize(N);
     inputSpectr = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * (N / 2 + 1));
     outputSpectr = (fftw_complex*)fftw_malloc(sizeof(fftw_complex) * (N / 2 + 1));
-    forward = fftw_plan_dft_r2c_1d(N, tempBuffer.data(), inputSpectr, FFTW_MEASURE);
-    backward = fftw_plan_dft_c2r_1d(N, outputSpectr, tempBuffer.data(), FFTW_ESTIMATE);
+    forward = fftw_plan_dft_r2c_1d(N, frame.data(), inputSpectr, FFTW_MEASURE);
+    backward = fftw_plan_dft_c2r_1d(N, outputSpectr, frame.data(), FFTW_ESTIMATE);
 }
 
 //Loading input file and configuring output file buffer size
@@ -49,37 +49,35 @@ void Shifter::make_shift(std::string outputFileName, float factor)
         {
             std::copy(inputAudio.samples[i].begin() + processed_samples,
                       inputAudio.samples[i].begin() + processed_samples + N,
-                      tempBuffer.begin());
+                      frame.begin());
 
-            //make_window(tempBuffer);
             fftw_execute(forward);
 
             scale_spector(factor, inputSpectr, outputSpectr);
 
             fftw_execute(backward);
-            for (int j = 0; j < (int)tempBuffer.size(); ++j)
-                tempBuffer[j] = tempBuffer[j] / N;
-            std::copy(tempBuffer.begin(),tempBuffer.end(),outputBuffer[i].begin()+processed_samples);
+            for (int j = 0; j < (int)frame.size(); ++j)
+                frame[j] = frame[j] / N;
+            std::copy(frame.begin(),frame.end(),outputBuffer[i].begin()+processed_samples);
             processed_samples += N;
         }
         if (numSamples != processed_samples)
         {
             for(int j=0;j<N;j++)
-                tempBuffer[j]=0;
+                frame[j]=0;
 
             std::copy(inputAudio.samples[i].begin() + processed_samples,
                       inputAudio.samples[i].end(),
-                      tempBuffer.begin());
+                      frame.begin());
 
-            //make_window(tempBuffer);
             fftw_execute(forward);
 
             scale_spector(factor, inputSpectr, outputSpectr);
 
             fftw_execute(backward);
-            for (int j = 0; j < (int)tempBuffer.size(); ++j)
-                tempBuffer[j] = tempBuffer[j] / N;
-            std::copy(tempBuffer.begin(), tempBuffer.begin() + numSamples % N, outputBuffer[i].begin() + processed_samples);
+            for (int j = 0; j < (int)frame.size(); ++j)
+                frame[j] = frame[j] / N;
+            std::copy(frame.begin(), frame.begin() + numSamples % N, outputBuffer[i].begin() + processed_samples);
         }
     }
 
@@ -88,6 +86,61 @@ void Shifter::make_shift(std::string outputFileName, float factor)
         outputAudio.save(outputFileName);
         qDebug() << "OK";
     }
+}
+
+void Shifter::shift_to_freq(float freq)
+{
+    int freq_index=find_freq_index_in_spectre(freq);
+    int max_index;
+
+    int numChannel = inputAudio.getNumChannels();
+    int numSamples = inputAudio.getNumSamplesPerChannel();
+
+    int processed_samples;
+    for (int i = 0; i < numChannel; ++i)
+        {
+            processed_samples = 0;
+            while (numSamples - processed_samples >= N)
+            {
+                std::copy(inputAudio.samples[i].begin() + processed_samples,
+                          inputAudio.samples[i].begin() + processed_samples + N,
+                          frame.begin());
+
+                fftw_execute(forward);
+
+                max_index=find_max_frame_freq_index(inputSpectr);
+
+                scale_spector(freq_index/max_index, inputSpectr, outputSpectr);
+
+                fftw_execute(backward);
+                for (int j = 0; j < (int)frame.size(); ++j)
+                    frame[j] = frame[j] / N;
+                std::copy(frame.begin(),frame.end(),outputBuffer[i].begin()+processed_samples);
+                processed_samples += N;
+            }
+    }
+}
+
+int Shifter::find_max_frame_freq_index(fftw_complex *frame)
+{
+    float max=0;
+    int max_index;
+    float abs;
+    for (int i=0;i<N;++i )
+    {
+        abs=sqrt(frame[i][0]*frame[i][0]+frame[i][1]*frame[i][1]);
+        if(abs>max)
+        {
+            max=abs;
+            max_index=i;
+        }
+    }
+    return max_index;
+}
+
+int Shifter::find_freq_index_in_spectre(float freq)
+{
+
 }
 
 Shifter::~Shifter()
