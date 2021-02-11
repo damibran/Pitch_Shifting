@@ -27,8 +27,24 @@ private slots:
     void keyPressEvent(QKeyEvent *event);
 
 private:
+    int octave=2;
+    std::map<std::string,int> keys {{ "z" , 0 },
+                                    { "s" , 1 },
+                                    { "x" , 2 },
+                                    { "d" , 3 },
+                                    { "c" , 4 },
+                                    { "v" , 5 },
+                                    { "g" , 6 },
+                                    { "b" , 7 },
+                                    { "h" , 8 },
+                                    { "n" , 9 },
+                                    { "j" , 10 },
+                                    { "m" , 11 }
+                                   };
     Ui::MainWindow *ui;
     Shifter shifter;
+    QString outputFileDir;
+    std::vector<std::string> outputFileNames;
 
 };
 #endif // MAINWINDOW_H

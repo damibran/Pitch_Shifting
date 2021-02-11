@@ -9,33 +9,18 @@
 class Shifter
 {
 public:
-    int octave=2;
-    std::map<std::string,int> keys {{ "z" , 0 },
-                                    { "s" , 1 },
-                                    { "x" , 2 },
-                                    { "d" , 3 },
-                                    { "c" , 4 },
-                                    { "v" , 5 },
-                                    { "g" , 6 },
-                                    { "b" , 7 },
-                                    { "h" , 8 },
-                                    { "n" , 9 },
-                                    { "j" , 10 },
-                                    { "m" , 11 }
-                                   };
     Shifter();
     ~Shifter();
     std::vector<double> note_freqs;
-    void make_shift(std::string outputFileName, float factor);
     void load_input_file(std::string inputFileName);
+    std::vector<std::string> create_pianoRoll_notes(std::string outputDir);
 private:
-    void shift_to_freq(float freq);
+    void shift_to_freq(float freq, std::string outputFileName);
     int find_max_frame_freq_index(fftw_complex *frame_spectr);
-    int find_freq_index_in_spectre(float freq);
     void make_window(std::vector<double> buffer);
     void scale_spector(float factor, fftw_complex *inputSpectr, fftw_complex *outputSpectr);
 private:
-    const int N = 4096;
+    const int N = 8192;
     AudioFile<double> inputAudio;
     std::vector<double> frame;
     AudioFile<double> outputAudio;

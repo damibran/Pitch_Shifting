@@ -1,4 +1,3 @@
-#include <QDir>
 #include <QDebug>
 #include <QFileDialog>
 
@@ -8,10 +7,12 @@
 #include <math.h>
 
 #include <QKeyEvent>
+#include <QDir>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->octaveLabel->setText(QString::number(octave));
 }
 
 MainWindow::~MainWindow()
@@ -34,9 +35,18 @@ void MainWindow::on_inputPathLineEdit_editingFinished()
 
 void MainWindow::on_processButton_clicked()
 {
-    if(!ui->inputPathLineEdit->text().isEmpty())
+    QString inputFile= ui->inputPathLineEdit->text();
+    if(!inputFile.isEmpty())
     {
+        QString inputFileName = inputFile.right(inputFile.size()-inputFile.lastIndexOf("/")-1);
+        QString inputFileDir = inputFile.mid(0,inputFile.lastIndexOf("/")+1);
+        outputFileDir = inputFileDir+inputFileName+"_Notes/";
+        QDir(inputFileDir).mkdir(inputFileName+"_Notes");
+        std::string temp=outputFileDir.toStdString();
 
+        outputFileNames = shifter.create_pianoRoll_notes(temp);
+
+        qDebug()<<"Generated";
     }
     else
         qDebug()<<"Error in fields data";
@@ -46,14 +56,16 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
 {
     if(event->text()=="q"||event->text()=="w")
     {
-        if(event->text()=="q"&&shifter.octave>0)
-            shifter.octave-=1;
-        else if(event->text()=="w"&&shifter.octave<4)
-            shifter.octave+=1;
-        ui->octaveLabel->setText(QString::number(shifter.octave));
+        if(event->text()=="q"&&octave>0)
+            octave-=1;
+        else if(event->text()=="w"&&octave<4)
+            octave+=1;
+        ui->octaveLabel->setText(QString::number(octave));
     }
     else{
-        qDebug()<<shifter.keys.at(event->text().toStdString())+12*shifter.octave;
+        std::string note_file_name = outputFileNames[keys[event->text().toStdString()]+12*octave];
+        qDebug()<<QString::fromStdString(note_file_name);
+        QSound::play(QString::fromStdString(outputFileDir.toStdString()+note_file_name));
     }
 }
 

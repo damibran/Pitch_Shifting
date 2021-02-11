@@ -35,9 +35,26 @@ void Shifter::load_input_file(std::string inputFileName)
         outputBuffer[i].resize(numSamples);
 }
 
-//Just fft and scaling
-void Shifter::make_shift(std::string outputFileName, float factor)
+std::vector<std::string> Shifter::create_pianoRoll_notes(std::string outputDir)
 {
+    std::vector<std::string> outputfileNames;
+    std::string freq;
+
+    for(int i=0;i<60;++i)
+    {
+        freq=std::to_string(floor(note_freqs[i]));
+        shift_to_freq(note_freqs[i],outputDir+freq+".wav");
+        outputfileNames.push_back(freq+".wav");
+    }
+
+    return outputfileNames;
+}
+
+void Shifter::shift_to_freq(float freq,std::string outputFileName)
+{
+    int freq_index= round(freq*N/inputAudio.getSampleRate());
+    int max_index;
+
     int numChannel = inputAudio.getNumChannels();
     int numSamples = inputAudio.getNumSamplesPerChannel();
 
@@ -53,7 +70,9 @@ void Shifter::make_shift(std::string outputFileName, float factor)
 
             fftw_execute(forward);
 
-            scale_spector(factor, inputSpectr, outputSpectr);
+            max_index=find_max_frame_freq_index(inputSpectr);
+
+            scale_spector((float)freq_index/max_index, inputSpectr, outputSpectr);
 
             fftw_execute(backward);
             for (int j = 0; j < (int)frame.size(); ++j)
@@ -72,7 +91,9 @@ void Shifter::make_shift(std::string outputFileName, float factor)
 
             fftw_execute(forward);
 
-            scale_spector(factor, inputSpectr, outputSpectr);
+            max_index=find_max_frame_freq_index(inputSpectr);
+
+            scale_spector((float)freq_index/max_index, inputSpectr, outputSpectr);
 
             fftw_execute(backward);
             for (int j = 0; j < (int)frame.size(); ++j)
@@ -88,45 +109,12 @@ void Shifter::make_shift(std::string outputFileName, float factor)
     }
 }
 
-void Shifter::shift_to_freq(float freq)
-{
-    int freq_index=find_freq_index_in_spectre(freq);
-    int max_index;
-
-    int numChannel = inputAudio.getNumChannels();
-    int numSamples = inputAudio.getNumSamplesPerChannel();
-
-    int processed_samples;
-    for (int i = 0; i < numChannel; ++i)
-        {
-            processed_samples = 0;
-            while (numSamples - processed_samples >= N)
-            {
-                std::copy(inputAudio.samples[i].begin() + processed_samples,
-                          inputAudio.samples[i].begin() + processed_samples + N,
-                          frame.begin());
-
-                fftw_execute(forward);
-
-                max_index=find_max_frame_freq_index(inputSpectr);
-
-                scale_spector(freq_index/max_index, inputSpectr, outputSpectr);
-
-                fftw_execute(backward);
-                for (int j = 0; j < (int)frame.size(); ++j)
-                    frame[j] = frame[j] / N;
-                std::copy(frame.begin(),frame.end(),outputBuffer[i].begin()+processed_samples);
-                processed_samples += N;
-            }
-    }
-}
-
 int Shifter::find_max_frame_freq_index(fftw_complex *frame)
 {
     float max=0;
     int max_index;
     float abs;
-    for (int i=0;i<N;++i )
+    for (int i=0;i<N/2+1;++i )
     {
         abs=sqrt(frame[i][0]*frame[i][0]+frame[i][1]*frame[i][1]);
         if(abs>max)
@@ -136,11 +124,6 @@ int Shifter::find_max_frame_freq_index(fftw_complex *frame)
         }
     }
     return max_index;
-}
-
-int Shifter::find_freq_index_in_spectre(float freq)
-{
-
 }
 
 Shifter::~Shifter()
