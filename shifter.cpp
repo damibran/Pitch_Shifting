@@ -22,8 +22,12 @@ void Shifter::load_input_file(std::string inputFileName)
 {
     inputAudio.load(inputFileName);
 
-    int numChannel = inputAudio.getNumChannels();
     int numSamples = inputAudio.getNumSamplesPerChannel();
+
+    inputAudio.setNumSamplesPerChannel(numSamples+N-numSamples%N);
+
+    int numChannel = inputAudio.getNumChannels();
+    numSamples = inputAudio.getNumSamplesPerChannel();
 
     inputAudio.printSummary();
 
@@ -79,27 +83,7 @@ void Shifter::shift_to_freq(float freq,std::string outputFileName)
                 frame[j] = frame[j] / N;
             std::copy(frame.begin(),frame.end(),outputBuffer[i].begin()+processed_samples);
             processed_samples += N;
-        }
-        if (numSamples != processed_samples)
-        {
-            for(int j=0;j<N;j++)
-                frame[j]=0;
-
-            std::copy(inputAudio.samples[i].begin() + processed_samples,
-                      inputAudio.samples[i].end(),
-                      frame.begin());
-
-            fftw_execute(forward);
-
-            max_index=find_max_frame_freq_index(inputSpectr);
-
-            scale_spector((float)freq_index/max_index, inputSpectr, outputSpectr);
-
-            fftw_execute(backward);
-            for (int j = 0; j < (int)frame.size(); ++j)
-                frame[j] = frame[j] / N;
-            std::copy(frame.begin(), frame.begin() + numSamples % N, outputBuffer[i].begin() + processed_samples);
-        }
+        }        
     }
 
     if (outputAudio.setAudioBuffer(outputBuffer))

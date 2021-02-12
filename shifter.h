@@ -20,7 +20,7 @@ private:
     void make_window(std::vector<double> buffer);
     void scale_spector(float factor, fftw_complex *inputSpectr, fftw_complex *outputSpectr);
 private:
-    const int N = 8192;
+    const int N = 4096;
     AudioFile<double> inputAudio;
     std::vector<double> frame;
     AudioFile<double> outputAudio;
