@@ -36,7 +36,7 @@ void Shifter::load_input_file(std::string inputFileName)
 
     outputBuffer.resize(numChannel);
     for (int i = 0; i < numChannel; ++i)
-        outputBuffer[i].resize(numSamples);
+        outputBuffer[i].resize(numSamples,0);
 }
 
 std::vector<std::string> Shifter::create_pianoRoll_notes(std::string outputDir)
@@ -62,6 +62,7 @@ void Shifter::shift_to_freq(float freq,std::string outputFileName)
     int numChannel = inputAudio.getNumChannels();
     int numSamples = inputAudio.getNumSamplesPerChannel();
 
+    int hop=N/2;
     int processed_samples;
     for (int i = 0; i < numChannel; ++i)
     {
@@ -78,11 +79,27 @@ void Shifter::shift_to_freq(float freq,std::string outputFileName)
 
             scale_spector((float)freq_index/max_index, inputSpectr, outputSpectr);
 
+            fftw_complex t;
+            t[0]=cos(hop*(max_index-freq_index));
+            t[1]=sin(hop*(max_index-freq_index));
+            for(int j=0;j<N/2+1;++j)
+            {
+                outputSpectr[j][0]=outputSpectr[j][0]*t[0]-outputSpectr[j][1]*t[1];
+                outputSpectr[j][1]=outputSpectr[j][0]*t[1]+outputSpectr[j][1]*t[0];
+            }
+
             fftw_execute(backward);
+
+            make_window(frame);
+
             for (int j = 0; j < (int)frame.size(); ++j)
                 frame[j] = frame[j] / N;
-            std::copy(frame.begin(),frame.end(),outputBuffer[i].begin()+processed_samples);
-            processed_samples += N;
+            //std::copy(frame.begin(),frame.end(),outputBuffer[i].begin()+processed_samples);
+            for(int j=0;j<N;++j)
+            {
+                outputBuffer[i][j+processed_samples]+=frame[j];
+            }
+            processed_samples += hop;
         }        
     }
 
@@ -118,7 +135,7 @@ Shifter::~Shifter()
     fftw_free(inputSpectr);
 }
 
-void Shifter::make_window(std::vector<double> buffer)
+void Shifter::make_window(std::vector<double>& buffer)
 {
     for (int k = 0; k < N; ++k)
     {

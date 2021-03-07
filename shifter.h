@@ -17,7 +17,7 @@ public:
 private:
     void shift_to_freq(float freq, std::string outputFileName);
     int find_max_frame_freq_index(fftw_complex *frame_spectr);
-    void make_window(std::vector<double> buffer);
+    void make_window(std::vector<double>& buffer);
     void scale_spector(float factor, fftw_complex *inputSpectr, fftw_complex *outputSpectr);
 private:
     const int N = 4096;
